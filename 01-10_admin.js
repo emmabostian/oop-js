@@ -26,6 +26,27 @@
     - You must use the `extends` keyword
 
 */
+
+// Change these boolean values to control whether you see 
+// the expected answer and/or hints.
+const showExpectedResult = false;
+const showHints = false;
+
+const userData = {
+    username: 'emma',
+    password: 'ZRYAK3GSS3wQujr'
+};
+
+const adminData = {
+    username: 'sarah',
+    password: 'r5tHZE9DUP1SgTB'
+}
+
+const userToDelete = 'carter'
+
+
+// Your code goes here
+
 class User {
 
 }
@@ -38,32 +59,16 @@ class Admin {
 // test code
 // ================================================================
 
-/**
- * Instructor Notes:
- * =================
- * Write test code that verifies the learners proposed answer
- * You can write one or more test cases.
- * Add test code for the learner here.
- *
- * Only the lines of code between DISPLAY_BEGIN and DISPLAY_END
- * are shown to the learner. The learner can change the visible
- * code to try different test cases.
- * 
- * Write your setup and testing code outside the display area.
- * Use System.out.println(...) to display text.
- */
-
-/* Keep the following section flush left for correct display to learner. */
-
 // ##DISPLAY_BEGIN##
 // This is how your code will be called.
-// Your answer should create a few countries, get their overview, and set the population
+// Your answer should be the largest value in the numbers array.
+// You can edit this code to try different testing cases.
 
-let user = new User('emma', '123');
-user.resetPassword('abc');
+const result= [
+    new User(userData.username, userData.password),
+    new Admin(adminData.username, adminData.password)
+]
 
-let admin = new Admin('sarah', 'abc');
-admin.deleteUser('emma')
 //##DISPLAY_END##
 
 // The rest of your code is invisible to the learner.
@@ -76,34 +81,42 @@ admin.deleteUser('emma')
  */
 
 // Return the correct result. This code is invisible to the learner.
-class User {
-    #password;
-    
-    constructor(username, password) {
-      this.username = username;
-      this.#password = password;
+const getCorrectResult = () => {
+    class User {
+        #password;
+        
+        constructor(username, password) {
+          this.username = username;
+          this.#password = password;
+        }
+        
+        #updatePassword(newPassword) {
+          this.#password = newPassword;
+        }
+        
+        resetPassword(newPassword) {
+          this.#updatePassword(newPassword);
+          return 'Your password has been updated'
+        }
     }
     
-    #updatePassword(newPassword) {
-      this.#password = newPassword;
+    class Admin extends User {
+        constructor(username, password) {
+            super(username, password);
+            this.isAdmin = true;
+        }
+        
+        deleteUser(userToDelete) {
+            return `The user ${userToDelete} has been deleted`;
+        }
     }
-    
-    resetPassword(newPassword) {
-      this.#updatePassword(newPassword);
-      return 'Your password has been updated'
-    }
-  }
 
-  class Admin extends User {
-    constructor(username, password) {
-      super(username, password);
-      this.isAdmin = true;
-    }
+    const testUser = new User(userData.username, userData.password);
+    const testAdmin = new Admin(adminData.username, adminData.password);
     
-    deleteUser(userToDelete) {
-      return `The user ${userToDelete} has been deleted`;
-    }
-  }
+    return [testUser, testAdmin];
+}
+
 /**
  * Display messages
  */
@@ -131,8 +144,8 @@ const hints = [
  */
 const displayMessage = (testPass, learnerResult, correctResult) => {
 
-    const promptForShowAnswer = "Change 'showExpectedResult' to 'true' to see the correct value.";
-    const promptForShowHints = "Change 'showHints' to 'true' to see a hint.";
+    const promptForShowAnswer = "Set 'showExpectedResult' to 'true' to see the correct value.";
+    const promptForShowHints = "Set 'showHints' to 'true' to see a hint.";
 
     const successMessages = [
         "You did it! This result is exactly right. ",
@@ -153,7 +166,7 @@ const displayMessage = (testPass, learnerResult, correctResult) => {
         "That's not the expected result. ",
         "Something isn't working. ",
         "Whoops, that's not it! Consider revisiting the question. ",
-        "You didn't get the correct answer this time. Time for another try.",
+        "You didn't get the correct answer this time. \nTime for another try.",
         "Incorrect. Revisit the question "      
     ];
 
@@ -180,7 +193,9 @@ const displayMessage = (testPass, learnerResult, correctResult) => {
 
         // Show expected answer
         if (showExpectedResult) {
-            console.log(`${indent}Expected result: ${correctResult}`)
+            console.log(`${indent}Expected result: `)
+            // Output the object as an object.
+            console.dir(correctResult)
         } else {
             console.log(`${indent}${promptForShowAnswer}`)
         }
@@ -205,41 +220,46 @@ function assert(condition, message) {
 	}
 }
 
-// Test for Math.max() method usage.
-const testMathMaxUsage = (testedFunction) => {
-
-    const originalMathMax = Math.max;
-    let mathMaxCalled = false;
-  
-    Math.max = function() {
-      mathMaxCalled = true;
-      return originalMathMax.apply(Math.max, arguments);
-    };
-  
-    // The function you want to test method usage in
-    testedFunction(); 
-  
-    Math.max = originalMathMax;
-
-    return mathMaxCalled;
-};
-  
-
-// Validation tests
-
-function testMathMax() {
-    return testMathMaxUsage(() => findLargest(numbers));
+function testUserUsername(userResult) {
+    return userResult.username === userData.username;
 }
 
+function testAdminData(adminResult) {
+    return adminResult.username === adminData.username && adminResult.isAdmin;
+}
+
+function testPasswordPrivacy(result) {
+    const [userResult, adminResult] = result;
+    return userResult.password === undefined && adminResult.password === undefined;
+}
+
+function testUserCannotDeleteUser(userResult) {
+    return !userResult.deleteUser;
+}
+
+function testAdminCanDeleteUser(adminResult) {
+    return adminResult.deleteUser(userToDelete) === `The user ${userToDelete} has been deleted`;
+}
+
+function testResetPassword(result) {
+    const [userResult, adminResult] = result;
+    return userResult.resetPassword('abc') === 'Your password has been updated' && adminResult.resetPassword('123') === 'Your password has been updated';
+}
 
 
 // Loop through tests, run each one, and display results.
 function runAllTests() {
+    const tests = 
+        [
+            { test: testUserUsername(result[0]), message: "User username data matches expected data."},
+            { test: testAdminData(result[1]), message: "Admin data matches expected data."},
+            { test: testPasswordPrivacy(result), message: "Password is private."},
+            { test: testUserCannotDeleteUser(result[0]), message: "User cannot delete another user."},
+            { test: testAdminCanDeleteUser(result[1]), message: "Admin can delete another user."},
+            { test: testResetPassword(result), message: "Reset password works as expected."},
+    ];
+       
 
-    const tests = [
-        { test: testMathMax(), message: "Use Math.max() method." },
-        { test: result === getCorrectResult, message: "Output matches test case." }
-    ]
 
     let testsPassed = 0;
     let totalTests = tests.length;
@@ -258,15 +278,15 @@ function runAllTests() {
     if (testsPassed === 0) {
         console.log("> No tests passed");
         console.log();
-        displayMessage(false, result, getCorrectResult);
+        displayMessage(false, result, getCorrectResult());
     } else if (testsPassed === totalTests) {
         console.log("> All tests passed");
         console.log();
-        displayMessage(true, result, getCorrectResult);
+        displayMessage(true, result, getCorrectResult());
     } else {
         console.log("> Some tests passed");
         console.log();
-        displayMessage(false, result, getCorrectResult);
+        displayMessage(false, result, getCorrectResult());
     }
 
 }

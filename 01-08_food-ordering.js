@@ -1,70 +1,55 @@
-// Write your answer here, and then test your code.
-// Your job is to implement the findLargest() method.
+/* 
+    Write your answer here, and then test your code.
+    Your job is to create an Order class.
+
+    The Order class takes the following parameters:
+        - restaurant: string
+        - total: float
+        - customer: string
+
+    The Order class has the following functions:
+        - orderStatus: returns a different string response based on the order status. The string responses for each code are as follows:
+            - 0: 'Waiting for the restaurant to accept the order'
+            - 1: 'Your order is being prepared'
+            - 2: 'Your order is ready for pickup'
+            - 3: 'Your order has been collected'
+
+    ** REQUIREMENTS **
+    - You must use a getter function for orderStatus 
+    - You must use a setter function for setting foodStatus
+
+*/
 
 // Change these boolean values to control whether you see 
 // the expected answer and/or hints.
 const showExpectedResult = false;
 const showHints = false;
 
-const students = [
-    {
-        name: 'Anwar',
-        grades: [97, 87, 99]
-    },
-    {
-        name: 'Sophie',
-        grades: [75, 22, 85]
-    },
-    {
-        name: 'Ron',
-        grades: [64, 77, 90]
-    }
-];
-const teacher = 'Harriet'
-
+const orderData = {
+    restaurant: 'Chick-Fil-A',
+    total: 14.73,
+    customer: 'Henry Cavill'
+}
 
 // Your code goes here
-
-function ClassRoster() {
-
+class Order {
+    constructor() {
+        this.foodStatus = 0;
+        this.validFoodStatuses = [0,1,2,3];
+    }
 }
-
-function Student() {
-    
-}
-
-function calculateGPA(grades) {
-    return Math.floor((grades.reduce((currSum, currValue) => currSum + currValue)) / grades.length);
-}
-
 
 // ================================================================
 // test code
 // ================================================================
 
-/**
- * Instructor Notes:
- * =================
- * Write test code that verifies the learners proposed answer
- * You can write one or more test cases.
- * Add test code for the learner here.
- *
- * Only the lines of code between DISPLAY_BEGIN and DISPLAY_END
- * are shown to the learner. The learner can change the visible
- * code to try different test cases.
- * 
- * Write your setup and testing code outside the display area.
- * Use System.out.println(...) to display text.
- */
-
-/* Keep the following section flush left for correct display to learner. */
-
 // ##DISPLAY_BEGIN##
 // This is how your code will be called.
 // Your answer should be the largest value in the numbers array.
 // You can edit this code to try different testing cases.
-const studentArray = students.map(student => new Student(student.name, student.grades));
-const result = new ClassRoster([...studentArray], teacher);
+
+const result= new Order(orderData.restaurant, orderData.total, orderData.customer);
+
 //##DISPLAY_END##
 
 // The rest of your code is invisible to the learner.
@@ -78,38 +63,40 @@ const result = new ClassRoster([...studentArray], teacher);
 
 // Return the correct result. This code is invisible to the learner.
 const getCorrectResult = () => {
-    function ClassRoster(roster = [], teacher = '') {
-        this.roster = roster;
-        this.teacher = teacher;
-      }
+    class Order {
+        constructor(restaurant, total, customer) {
+            this.restaurant = restaurant;
+            this.total = total;
+            this.customer = customer;
+            this.foodStatus = 0;
+            this.validFoodStatuses = [0,1,2,3];
+        }
+    
+        get orderStatus () {
+            switch (this.foodStatus) {
+                case 0:
+                    return 'Waiting for the restaurant to accept the order';
+                case 1:
+                    return 'Your order is being prepared';
+                case 2:
+                    return 'Your order is ready for pick up';
+                case 3:
+                    return 'Your order has been collected';
+                default:
+                    return 'Something went wrong'
+            }
+        }
       
-      ClassRoster.prototype.getRoster = function() {
-        let studentNames = [];
-        this.roster.forEach(student => studentNames.push(student.name));
-        console.log(studentNames.join(', '));
+      set orderStatus(newStatus) {
+        if (this.validFoodStatuses.includes(newStatus)) {
+            this.foodStatus = newStatus;
+        } else {
+            this.foodStatus = null;
+        }
       }
-      
-      ClassRoster.prototype.returnGraduatingStudents = function() {
-        console.log(this.roster.filter(student => student.checkIsPassing()));
-      }
-      
-      function Student(name = '', grades = []) {
-        this.name = name;
-        this.grades = grades;
-      }
-      
-      Student.prototype.getGrades = function() {
-        console.log(this.grades);
-      }
-      
-      Student.prototype.checkIsPassing = function() {
-        let gpa = Math.floor((this.grades.reduce((currSum, currValue) => currSum + currValue)) / this.grades.length);
-        console.log(gpa > 70);
-        return gpa > 70;
-      }
+    }
 
-    const testClassRoster = new ClassRoster([...studentArray], teacher);
-    return testClassRoster;
+    return new Order(orderData.restaurant, orderData.total, orderData.customer);
 }
 
 /**
@@ -118,9 +105,8 @@ const getCorrectResult = () => {
 
 // Hints are specific for your course and can be edited.
 const hints = [
-    "Object functions shouldn't be added to each instance of the object.",
-    "Remember to set the parameters for each instance of the object, not the prototype.",
-    "Remember the ClassRoster object takes an array of Student objects."
+    "Getters allow us to write myOrder.orderStatus instead of myOrder.getOrderStatus()",
+    "Use a switch statement to return the order status",
 ];
 
 // Use this divider to separate console messages
@@ -216,48 +202,59 @@ function assert(condition, message) {
 	}
 }
 
-function getClassRoster() {
-    let studentNames = [];
-    students.forEach(student => {
-        studentNames.push(student.name);
-    });
-    return studentNames.join(', ')
+function testOrderData(result) {
+    return result.restaurant === orderData.restaurant && result.total === orderData.total && result.customer === orderData.customer;
 }
 
-function checkIsPassing(student) {
-    let gpa = Math.floor((student.grades.reduce((currSum, currValue) => currSum + currValue)) / student.grades.length);
-    return gpa > 70;
-}
-
-function getGraduatingStudents() {
-    const filteredStudents = students.filter(student => checkIsPassing(student));
-    const graduatingStudents = filteredStudents.map(student => new Student(student.name, student.grades));
-    return graduatingStudents;
-}
-
-function testGraduatingStudents(result) {
-    const resultGraduatingStudents = result.returnGraduatingStudents();
-    const expectedGraduatingStudents = getGraduatingStudents();
-    if (resultGraduatingStudents.length !== expectedGraduatingStudents.length) {
-        return false;
+function getOrderStatus(status) {
+    switch (status) {
+        case 0:
+            return 'Waiting for the restaurant to accept the order';
+        case 1:
+            return 'Your order is being prepared';
+        case 2:
+            return 'Your order is ready for pick up';
+        case 3:
+            return 'Your order has been collected';
+        default:
+            return 'Something went wrong'
     }
-    for (let i = 0; i < resultGraduatingStudents.length; i++) {
-        if (JSON.stringify(resultGraduatingStudents[i]) !== JSON.stringify(expectedGraduatingStudents[i])) {
-            return false;
-        }
-    }
+}
+
+function testOrderStatus(result) {
+    return result.orderStatus === getOrderStatus(0)
+}
+
+function testSetOrderStatus(result) {
+    result.orderStatus = 1;
+    if (result.orderStatus !== getOrderStatus(1)) return false;
+
+    
+    result.orderStatus = 2;
+    if (result.orderStatus !== getOrderStatus(2)) return false ;
+
+    result.orderStatus = 3;
+    if (result.orderStatus !== getOrderStatus(3)) return false ;
+
     return true;
 }
 
+function testInvalidOrderStatus(result) {
+    result.orderStatus = 8;
+    return result.orderStatus === getOrderStatus(8);
+}
 
 // Loop through tests, run each one, and display results.
 function runAllTests() {
+    const tests = 
+        [
+            { test: testOrderData(result), message: "Data matches expected data."},
+            { test: testOrderStatus(result), message: "Order status matches expected data."},
+            { test: testSetOrderStatus(result), message: "Set order status works as expected."},
+            { test: testInvalidOrderStatus(result), message: "Set order status with invalid status works as expected."},
+    ];
+       
 
-    const tests = [
-        { test: result.getRoster() === getClassRoster(), message: "Class roster matches data." },
-        { test: testGraduatingStudents(result), message: "Graduating students matches data." },
-        { test: result.roster[0].getGrades() === new Student(students[0].name, students[0].grades).getGrades(), message: "First student's grades match data." }
-    ]
 
     let testsPassed = 0;
     let totalTests = tests.length;

@@ -24,6 +24,29 @@
     - You must use `Object.create` to create a relationship between Book and ComicBook
 
 */
+
+// Change these boolean values to control whether you see 
+// the expected answer and/or hints.
+const showExpectedResult = false;
+const showHints = false;
+
+const bookData = {
+    title: 'Pride and Prejudice',
+    author: 'Emily Bronté',
+    quantity: 3,
+    edition: 4
+}
+
+const comicBookData = {
+    title: 'Spiderman',
+    author: 'Stan Lee',
+    quantity: 3,
+    graphicArtist: 'Todd McFarlane'
+}
+
+
+// Your code goes here
+
 function Book() {
 
 }
@@ -36,32 +59,14 @@ function ComicBook() {
 // test code
 // ================================================================
 
-/**
- * Instructor Notes:
- * =================
- * Write test code that verifies the learners proposed answer
- * You can write one or more test cases.
- * Add test code for the learner here.
- *
- * Only the lines of code between DISPLAY_BEGIN and DISPLAY_END
- * are shown to the learner. The learner can change the visible
- * code to try different test cases.
- * 
- * Write your setup and testing code outside the display area.
- * Use System.out.println(...) to display text.
- */
-
-/* Keep the following section flush left for correct display to learner. */
-
 // ##DISPLAY_BEGIN##
 // This is how your code will be called.
-// Your answer should create a book and a comic book
+// Your answer should be the largest value in the numbers array.
+// You can edit this code to try different testing cases.
 
-const prideAndPrejudice = new Book('Pride and Prejudice', 'Emily Bronté', 3, 4);
-prideAndPrejudice.setEdition = 5;
-
-const spiderman = new ComicBook('Spiderman', 'Author', 15, 'Graphic Artist');
-spiderman.sell();
+const book = new Book(bookData.title, bookData.author, bookData.quantity, bookData.edition);
+const comicBook = new ComicBook(comicBookData.title, comicBookData.author, comicBookData.quantity, comicBookData.graphicArtist);
+const result = [book, comicBook];
 //##DISPLAY_END##
 
 // The rest of your code is invisible to the learner.
@@ -74,36 +79,41 @@ spiderman.sell();
  */
 
 // Return the correct result. This code is invisible to the learner.
-function Book(title, author, quantity, edition) {
-    this.title = title;
-    this.author = author;
-    this.quantity = quantity;
-    this.edition = edition || '';
-  }
-  
-  Object.defineProperty(Book, "setEdition", {
-    set: function(newEdition) {
-      this.edition = newEdition;
-    }
-  });
-  
-  Book.prototype.sell = function() {
-    if (this.quantity > 0) {
-      this.quantity = this.quantity - 1;
-    }
-  }
-  
-  function ComicBook(title, author, quantity, graphicArtist) {
-    Book.call(this, title, author, quantity);
-    this.graphicArtist = graphicArtist;
-  }
-  
-  ComicBook.prototype = Object.create(Book.prototype, {
-    constructor: {
-      value: ComicBook
-    }
-  });
+const getCorrectResult = () => {
+    function Book(title, author, quantity, edition) {
+        this.title = title;
+        this.author = author;
+        this.quantity = quantity;
+        this.edition = edition || '';
+      }
+      
+      Object.defineProperty(Book, "setEdition", {
+        set: function(newEdition) {
+          this.edition = newEdition;
+        }
+      });
+      
+      Book.prototype.sell = function() {
+        if (this.quantity > 0) {
+          this.quantity = this.quantity - 1;
+        }
+      }
+      
+      function ComicBook(title, author, quantity, graphicArtist) {
+        Book.call(this, title, author, quantity);
+        this.graphicArtist = graphicArtist;
+      }
+      
+      ComicBook.prototype = Object.create(Book.prototype, {
+        constructor: {
+          value: ComicBook
+        }
+      });
 
+    const testBook = new Book(bookData.title, bookData.author, bookData.quantity, bookData.edition);
+    const testComicBook = new ComicBook(comicBookData.title, comicBookData.author, comicBookData.quantity, comicBookData.graphicArtist);
+    return [testBook, testComicBook];
+}
 
 /**
  * Display messages
@@ -133,8 +143,8 @@ const hints = [
  */
 const displayMessage = (testPass, learnerResult, correctResult) => {
 
-    const promptForShowAnswer = "Change 'showExpectedResult' to 'true' to see the correct value.";
-    const promptForShowHints = "Change 'showHints' to 'true' to see a hint.";
+    const promptForShowAnswer = "Set 'showExpectedResult' to 'true' to see the correct value.";
+    const promptForShowHints = "Set 'showHints' to 'true' to see a hint.";
 
     const successMessages = [
         "You did it! This result is exactly right. ",
@@ -155,7 +165,7 @@ const displayMessage = (testPass, learnerResult, correctResult) => {
         "That's not the expected result. ",
         "Something isn't working. ",
         "Whoops, that's not it! Consider revisiting the question. ",
-        "You didn't get the correct answer this time. Time for another try.",
+        "You didn't get the correct answer this time. \nTime for another try.",
         "Incorrect. Revisit the question "      
     ];
 
@@ -182,7 +192,9 @@ const displayMessage = (testPass, learnerResult, correctResult) => {
 
         // Show expected answer
         if (showExpectedResult) {
-            console.log(`${indent}Expected result: ${correctResult}`)
+            console.log(`${indent}Expected result: `)
+            // Output the object as an object.
+            console.dir(correctResult)
         } else {
             console.log(`${indent}${promptForShowAnswer}`)
         }
@@ -207,40 +219,41 @@ function assert(condition, message) {
 	}
 }
 
-// Test for Math.max() method usage.
-const testMathMaxUsage = (testedFunction) => {
-
-    const originalMathMax = Math.max;
-    let mathMaxCalled = false;
-  
-    Math.max = function() {
-      mathMaxCalled = true;
-      return originalMathMax.apply(Math.max, arguments);
-    };
-  
-    // The function you want to test method usage in
-    testedFunction(); 
-  
-    Math.max = originalMathMax;
-
-    return mathMaxCalled;
-};
-  
-
-// Validation tests
-
-function testMathMax() {
-    return testMathMaxUsage(() => findLargest(numbers));
+function testBookData(book) {
+    return book.title === bookData.title && book.author === bookData.author && book.edition === bookData.edition;
 }
 
+function testComicBookData(comicBook) {
+    return comicBook.title === comicBookData.title && comicBook.author === comicBookData.author && comicBook.graphicArtist === comicBookData.graphicArtist;
+
+}
+
+function testBookSetEdition(book) {
+    const initialEdition = book.edition;
+    book.edition = book.edition + 1;
+    return book.edition === initialEdition + 1;
+}
+
+function testSellBook(book) {
+    const initialQuantity = book.quantity;
+    book.sell();
+    return book.quantity === initialQuantity - 1;
+}
+
+function testComicBook(book, comicBook) {
+    return comicBook.graphicArtist && !comicBook.edition && !book.graphicArtist;
+}
 
 
 // Loop through tests, run each one, and display results.
 function runAllTests() {
-
+    const [book, comicBook] = result;
     const tests = [
-        { test: testMathMax(), message: "Use Math.max() method." },
-        { test: result === getCorrectResult, message: "Output matches test case." }
+        { test: testBookData(book), message: "Book data matches expected data."},
+        { test: testComicBookData(comicBook), message: "Comic book data matches expected data."},
+        { test: testBookSetEdition(book), message: "Book setEdition matches data."},
+        { test: testSellBook(book), message: "Book sell function matches data."},
+        { test: testComicBook(book, comicBook), message: "Comic book data matches expected data."},
     ]
 
     let testsPassed = 0;
@@ -260,15 +273,15 @@ function runAllTests() {
     if (testsPassed === 0) {
         console.log("> No tests passed");
         console.log();
-        displayMessage(false, result, getCorrectResult);
+        displayMessage(false, result, getCorrectResult());
     } else if (testsPassed === totalTests) {
         console.log("> All tests passed");
         console.log();
-        displayMessage(true, result, getCorrectResult);
+        displayMessage(true, result, getCorrectResult());
     } else {
         console.log("> Some tests passed");
         console.log();
-        displayMessage(false, result, getCorrectResult);
+        displayMessage(false, result, getCorrectResult());
     }
 
 }

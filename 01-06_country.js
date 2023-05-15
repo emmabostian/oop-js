@@ -1,80 +1,53 @@
 /* 
     Write your answer here, and then test your code.
-    Your job is to create a Student object and a 
-    ClassRoster object.
+    Your job is to create a Country class.
 
-    The Student object takes the following parameters:
-        - name: string
-        - grades: number[]
+    The Country class takes the following parameters:
+        - name: string (i.e. 'France')
+        - continent: string (i.e. 'Europe')
+        - currency: string (i.e. 'Euro')
+        - population: string (i.e. '67.75 milliion')
 
-    The ClassRoster object takes the following parameters:
-        - roster: Student[]
-        - teacher: string
+    The Country class has the following functions:
+        - getOverview(): returns an string overview of the country's data (i.e. 'France is a country in Europe. Its currency is the Euro and it has a current population of 67.75 people.')
+        - setPopulation(newPopulation): sets the population for a country
 
-    The Student object has the following functions:
-        - getGrades: returns the grades for the student
-        - checkIsPassing: finds the grade point average (gpa) and returns
-            true if the gpa is > 70
-    The ClassRoster object has the following functions:
-        - getRoster: returns a comma-separated string with each student's name
-        - returnGraduatingStudents: returns an array with the passing students
+    ** REQUIREMENTS **
+    - You must use `defineProperty` to declare the `setEdition` function
+    - You must use `Object.create` to create a relationship between Book and ComicBook
+
 */
-function ClassRoster() {
 
-}
-
-function Student() {
-    
-}
-
-function calculateGPA(grades) {
-    return Math.floor((grades.reduce((currSum, currValue) => currSum + currValue)) / grades.length);
-}
 // Change these boolean values to control whether you see 
 // the expected answer and/or hints.
 const showExpectedResult = false;
 const showHints = false;
 
-function findLargest(numbers) {
-    // This is a sample implementation to test your validators
-    return Math.max(...numbers);
-    // return 2
+const countryData = {
+    name: 'France',
+    continent: 'Europe',
+    currency: 'Euro',
+    population: '67.75 million'
 }
 
+// Your code goes here
+
+class Country {
+    
+}
 
 
 // ================================================================
 // test code
 // ================================================================
 
-/**
- * Instructor Notes:
- * =================
- * Write test code that verifies the learners proposed answer
- * You can write one or more test cases.
- * Add test code for the learner here.
- *
- * Only the lines of code between DISPLAY_BEGIN and DISPLAY_END
- * are shown to the learner. The learner can change the visible
- * code to try different test cases.
- * 
- * Write your setup and testing code outside the display area.
- * Use System.out.println(...) to display text.
- */
-
-/* Keep the following section flush left for correct display to learner. */
-
 // ##DISPLAY_BEGIN##
 // This is how your code will be called.
-// Your answer should create several students with three different course grades
-// as well as a class with these students and return an array containing the
-// graduating students.
-let anwar = new Student('Anwar', [97, 87, 99]);
-let sophie = new Student('Sophie', [75, 22, 85]);
-let ron = new Student('Ron', [64, 77, 90]);
+// Your answer should be the largest value in the numbers array.
+// You can edit this code to try different testing cases.
 
-let physics = new Class([anwar, sophie, ron], 'Harriet');
-physics.returnGraduatingStudents();
+const result= new Country(countryData.name, countryData.continent, countryData.currency, countryData.population);
+
 //##DISPLAY_END##
 
 // The rest of your code is invisible to the learner.
@@ -87,36 +60,28 @@ physics.returnGraduatingStudents();
  */
 
 // Return the correct result. This code is invisible to the learner.
-function Class(roster = [], teacher = '') {
-    this.roster = roster;
-    this.teacher = teacher;
-  }
-  
-  Class.prototype.getRoster = function() {
-    let studentNames = [];
-    this.roster.forEach(student => studentNames.push(student.name));
-    console.log(studentNames.join(', '));
-  }
-  
-  Class.prototype.returnGraduatingStudents = function() {
-    console.log(this.roster.filter(student => student.checkIsPassing()));
-  }
-  
-  function Student(name = '', grades = []) {
-    this.name = name;
-    this.grades = grades;
-  }
-  
-  Student.prototype.getGrades = function() {
-    console.log(this.grades);
-  }
-  
-  Student.prototype.checkIsPassing = function() {
-    let gpa = Math.floor((this.grades.reduce((currSum, currValue) => currSum + currValue)) / this.grades.length);
-    console.log(gpa > 70);
-    return gpa > 70;
-  }
+const getCorrectResult = () => {
+    class Country {
+        constructor(name, continent, currency, population) {
+            this.name = name;
+            this.continent = continent;
+            this.currency = currency;
+            this.population = population;
+        }
+        
+        getOverview() {
+        return `${this.name} is a country in ${this.continent}. Its currency is the ${this.currency} and it has a current population of ${this.population} people.`;
+        }
+        
+        setPopulation(newPopulation) {
+            this.population = newPopulation;
+        }
+    }
 
+    const testCountry = new Country(countryData.name, countryData.continent, countryData.currency, countryData.population);
+    
+    return testCountry;
+}
 
 /**
  * Display messages
@@ -146,8 +111,8 @@ const hints = [
  */
 const displayMessage = (testPass, learnerResult, correctResult) => {
 
-    const promptForShowAnswer = "Change 'showExpectedResult' to 'true' to see the correct value.";
-    const promptForShowHints = "Change 'showHints' to 'true' to see a hint.";
+    const promptForShowAnswer = "Set 'showExpectedResult' to 'true' to see the correct value.";
+    const promptForShowHints = "Set 'showHints' to 'true' to see a hint.";
 
     const successMessages = [
         "You did it! This result is exactly right. ",
@@ -168,7 +133,7 @@ const displayMessage = (testPass, learnerResult, correctResult) => {
         "That's not the expected result. ",
         "Something isn't working. ",
         "Whoops, that's not it! Consider revisiting the question. ",
-        "You didn't get the correct answer this time. Time for another try.",
+        "You didn't get the correct answer this time. \nTime for another try.",
         "Incorrect. Revisit the question "      
     ];
 
@@ -195,7 +160,9 @@ const displayMessage = (testPass, learnerResult, correctResult) => {
 
         // Show expected answer
         if (showExpectedResult) {
-            console.log(`${indent}Expected result: ${correctResult}`)
+            console.log(`${indent}Expected result: `)
+            // Output the object as an object.
+            console.dir(correctResult)
         } else {
             console.log(`${indent}${promptForShowAnswer}`)
         }
@@ -220,41 +187,32 @@ function assert(condition, message) {
 	}
 }
 
-// Test for Math.max() method usage.
-const testMathMaxUsage = (testedFunction) => {
-
-    const originalMathMax = Math.max;
-    let mathMaxCalled = false;
-  
-    Math.max = function() {
-      mathMaxCalled = true;
-      return originalMathMax.apply(Math.max, arguments);
-    };
-  
-    // The function you want to test method usage in
-    testedFunction(); 
-  
-    Math.max = originalMathMax;
-
-    return mathMaxCalled;
-};
-  
-
-// Validation tests
-
-function testMathMax() {
-    return testMathMaxUsage(() => findLargest(numbers));
+function testCountryData(result) {
+    return result.name === countryData.name && result.continent === countryData.continent && result.currency === countryData.currency && result.population === countryData.population;
 }
 
+function testGetOverview(result) {
+    return result.getOverview() === `${countryData.name} is a country in ${countryData.continent}. Its currency is the ${countryData.currency} and it has a current population of ${countryData.population} people.`
+}
+
+function testSetPopulation(result) {
+    const initialPopulation = result.population;
+    const newPopulation = '70.12 million';
+    result.setPopulation(newPopulation);
+    return result.population !== initialPopulation && result.population === newPopulation;
+}
 
 
 // Loop through tests, run each one, and display results.
 function runAllTests() {
+    const tests = 
+        [
+            { test: testCountryData(result), message: "Country data matches expected data."},
+            { test: testGetOverview(result), message: "Country overview matches expected overview."},
+            { test: testSetPopulation(result), message: "setPopulation matches expected data."},
+    ];
+       
 
-    const tests = [
-        { test: testMathMax(), message: "Use Math.max() method." },
-        { test: result === getCorrectResult, message: "Output matches test case." }
-    ]
 
     let testsPassed = 0;
     let totalTests = tests.length;
@@ -273,15 +231,15 @@ function runAllTests() {
     if (testsPassed === 0) {
         console.log("> No tests passed");
         console.log();
-        displayMessage(false, result, getCorrectResult);
+        displayMessage(false, result, getCorrectResult());
     } else if (testsPassed === totalTests) {
         console.log("> All tests passed");
         console.log();
-        displayMessage(true, result, getCorrectResult);
+        displayMessage(true, result, getCorrectResult());
     } else {
         console.log("> Some tests passed");
         console.log();
-        displayMessage(false, result, getCorrectResult);
+        displayMessage(false, result, getCorrectResult());
     }
 
 }
