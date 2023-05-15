@@ -1,7 +1,7 @@
 /* 
     Write your answer here, and then test your code.
     Your job is to create a Student object and a 
-    ClassRoster object.
+    CourseRoster object.
 
     The Student object takes the following parameters:
         - name: string
@@ -25,7 +25,7 @@
 const showExpectedResult = false;
 const showHints = false;
 
-const students = [
+const roster = [
     {
         name: 'Anwar',
         grades: [97, 87, 99]
@@ -44,7 +44,7 @@ const teacher = 'Harriet'
 
 // Your code goes here
 
-function ClassRoster() {
+function CourseRoster() {
 
 }
 
@@ -52,6 +52,7 @@ function Student() {
     
 }
 
+/* A student is passing if their GPA is > 70 */
 function calculateGPA(grades) {
     return Math.floor((grades.reduce((currSum, currValue) => currSum + currValue)) / grades.length);
 }
@@ -80,10 +81,10 @@ function calculateGPA(grades) {
 
 // ##DISPLAY_BEGIN##
 // This is how your code will be called.
-// Your answer should be the largest value in the numbers array.
-// You can edit this code to try different testing cases.
-const studentArray = students.map(student => new Student(student.name, student.grades));
-const result = new ClassRoster([...studentArray], teacher);
+// Your answer should be an instance of the `CourseRoster` object
+// You can edit the `students` code to try different testing cases.
+const studentArray = roster.map(student => new Student(student.name, student.grades));
+const result = new CourseRoster([...studentArray], teacher);
 //##DISPLAY_END##
 
 // The rest of your code is invisible to the learner.
@@ -97,38 +98,37 @@ const result = new ClassRoster([...studentArray], teacher);
 
 // Return the correct result. This code is invisible to the learner.
 const getCorrectResult = () => {
-    function ClassRoster(roster = [], teacher = '') {
+    function CourseRoster(roster, teacher) {
         this.roster = roster;
         this.teacher = teacher;
       }
       
-      ClassRoster.prototype.getRoster = function() {
+      CourseRoster.prototype.getRoster = function() {
         let studentNames = [];
         this.roster.forEach(student => studentNames.push(student.name));
-        console.log(studentNames.join(', '));
+        return studentNames.join(', ');
       }
       
-      ClassRoster.prototype.returnGraduatingStudents = function() {
-        console.log(this.roster.filter(student => student.checkIsPassing()));
+      CourseRoster.prototype.returnGraduatingStudents = function() {
+        return this.roster.filter(student => student.checkIsPassing());
       }
       
-      function Student(name = '', grades = []) {
+      function Student(name, grades) {
         this.name = name;
         this.grades = grades;
       }
       
       Student.prototype.getGrades = function() {
-        console.log(this.grades);
+        return this.grades;
       }
       
       Student.prototype.checkIsPassing = function() {
         let gpa = Math.floor((this.grades.reduce((currSum, currValue) => currSum + currValue)) / this.grades.length);
-        console.log(gpa > 70);
         return gpa > 70;
       }
 
-    const testClassRoster = new ClassRoster([...studentArray], teacher);
-    return testClassRoster;
+    const testCourseRoster = new CourseRoster([...studentArray], teacher);
+    return testCourseRoster;
 }
 
 /**
@@ -139,7 +139,7 @@ const getCorrectResult = () => {
 const hints = [
     "Object functions shouldn't be added to each instance of the object.",
     "Remember to set the parameters for each instance of the object, not the prototype.",
-    "Remember the ClassRoster object takes an array of Student objects."
+    "Remember the CourseRoster object takes an array of Student objects."
 ];
 
 // Use this divider to separate console messages
@@ -235,9 +235,9 @@ function assert(condition, message) {
 	}
 }
 
-function getClassRoster() {
+function getCourseRoster() {
     let studentNames = [];
-    students.forEach(student => {
+    roster.forEach(student => {
         studentNames.push(student.name);
     });
     return studentNames.join(', ')
@@ -249,7 +249,7 @@ function checkIsPassing(student) {
 }
 
 function getGraduatingStudents() {
-    const filteredStudents = students.filter(student => checkIsPassing(student));
+    const filteredStudents = roster.filter(student => checkIsPassing(student));
     const graduatingStudents = filteredStudents.map(student => new Student(student.name, student.grades));
     return graduatingStudents;
 }
@@ -273,9 +273,9 @@ function testGraduatingStudents(result) {
 function runAllTests() {
 
     const tests = [
-        { test: result.getRoster() === getClassRoster(), message: "Class roster matches data." },
+        { test: result.getRoster() === getCourseRoster(), message: "Class roster matches data." },
         { test: testGraduatingStudents(result), message: "Graduating students matches data." },
-        { test: result.roster[0].getGrades() === new Student(students[0].name, students[0].grades).getGrades(), message: "First student's grades match data." }
+        { test: result.roster[0].getGrades() === new Student(roster[0].name, roster[0].grades).getGrades(), message: "First student's grades match data." }
     ]
 
     let testsPassed = 0;
