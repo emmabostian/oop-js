@@ -41,6 +41,11 @@ const roster = [
 ];
 const teacher = 'Harriet'
 
+/* A student is passing if their GPA is > 70 */
+function calculateGPA(grades) {
+    return Math.floor((grades.reduce((currSum, currValue) => currSum + currValue)) / grades.length);
+}
+
 
 // Your code goes here
 
@@ -52,10 +57,6 @@ function Student() {
     
 }
 
-/* A student is passing if their GPA is > 70 */
-function calculateGPA(grades) {
-    return Math.floor((grades.reduce((currSum, currValue) => currSum + currValue)) / grades.length);
-}
 
 
 // ================================================================

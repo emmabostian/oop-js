@@ -84,7 +84,7 @@ const getCorrectResult = () => {
         this.title = title;
         this.author = author;
         this.quantity = quantity;
-        this.edition = edition || '';
+        this.edition = edition;
       }
       
       Object.defineProperty(Book, "setEdition", {
