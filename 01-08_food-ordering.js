@@ -33,10 +33,7 @@ const orderData = {
 
 // Your code goes here
 class Order {
-    constructor() {
-        this.foodStatus = 0;
-        this.validFoodStatuses = [0,1,2,3];
-    }
+    
 }
 
 // ================================================================

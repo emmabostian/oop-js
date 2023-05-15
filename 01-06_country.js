@@ -13,9 +13,7 @@
         - setPopulation(newPopulation): sets the population for a country
 
     ** REQUIREMENTS **
-    - You must use `defineProperty` to declare the `setEdition` function
-    - You must use `Object.create` to create a relationship between Book and ComicBook
-
+    - You must use the class syntax
 */
 
 // Change these boolean values to control whether you see 
